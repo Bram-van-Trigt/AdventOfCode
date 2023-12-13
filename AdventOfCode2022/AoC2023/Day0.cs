@@ -20,14 +20,18 @@ namespace AdventOfCode
             Console.WriteLine($"The answer is of day {day} = {answer}");
         }
 
-
-        public static string[] readInput(int day, bool example)
+        public static string[] readInput(int day, bool useExample)
         {
-            string[] exampleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/exampleInputDay{day}.txt");
-            string[] puzzleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/puzzleInputDay{day}.txt");
-
-            if (example) { return exampleInput; }
-            else { return puzzleInput; }
+            if (useExample)
+            {
+                string[] exampleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/exampleInputDay{day}.txt");
+                return exampleInput;
+            }
+            else
+            {
+                string[] puzzleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/puzzleInputDay{day}.txt");
+                return puzzleInput;
+            }
         }
 
     }
