@@ -15,7 +15,7 @@ namespace AdventOfCode
             int day = GetPuzzleDay(overrideDay);
             Console.WriteLine($"Puzzle day loaded is {day}");
 
-            Assembly assembly = Assembly.LoadFrom("./AdventOfCode.dll"); // Get your assembly
+            Assembly assembly = Assembly.LoadFrom("./AoC2023.dll"); // Get your assembly
             TypeInfo type = assembly.DefinedTypes
                 .Where(t => t.Name.ToUpper() == $"AOC{year}DAY{day}")
                 .FirstOrDefault();

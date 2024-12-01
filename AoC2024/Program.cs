@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace AdventOfCode
+namespace AoC2024
 {
     internal class Program
     {
@@ -15,7 +15,7 @@ namespace AdventOfCode
             int day = GetPuzzleDay(overrideDay);
             Console.WriteLine($"Puzzle day loaded is {day}");
 
-            Assembly assembly = Assembly.LoadFrom("./AdventOfCode.dll"); // Get your assembly
+            Assembly assembly = Assembly.LoadFrom("./AoC2024.dll"); // Get your assembly
             TypeInfo type = assembly.DefinedTypes
                 .Where(t => t.Name.ToUpper() == $"AOC{year}DAY{day}")
                 .FirstOrDefault();
@@ -31,7 +31,7 @@ namespace AdventOfCode
             if (day == 0)
             {
                 DateTime startDate = DateTime.Parse("2024/12/01");
-                return (DateTime.Today - startDate).Days;
+                return (DateTime.Today - startDate).Days + 1;
             }
             else
             {
