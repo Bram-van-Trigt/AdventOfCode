@@ -9,8 +9,8 @@ namespace AdventOfCode
     {
         private static void Main(string[] args)
         {
-            int year = 2023;
-            int overrideDay = 4;
+            int year = 2024;
+            int overrideDay = 0;
 
             int day = GetPuzzleDay(overrideDay);
             Console.WriteLine($"Puzzle day loaded is {day}");
@@ -30,7 +30,7 @@ namespace AdventOfCode
         {
             if (day == 0)
             {
-                DateTime startDate = DateTime.Parse("2023/12/01");
+                DateTime startDate = DateTime.Parse("2024/12/01");
                 return (DateTime.Today - startDate).Days;
             }
             else
