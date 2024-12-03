@@ -18,12 +18,66 @@ namespace AdventOfCode
             string[] data = readInput(day, false);
             
             foreach (string report in data) {
+                int[] reportValues = report.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
+                bool isSafe = validate(reportValues);
+                
+                if (isSafe) { answer++; }
+            }
 
+            Console.WriteLine($"The answer is of day {day} = {answer}");
+        }
+
+        public static void Part2() {
+            int day = 2;
+            int answer = 0;
+
+            string[] data = readInput(day, false);
+
+            foreach (string report in data) {
+                    
+                int[] reportValues = report?.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
+                bool isSafe = false;
+
+                //check report without skip
+                if (validate(reportValues)){
+                    answer++;
+                    continue;
+                }
+                else {
+                    isSafe = false;
+
+                    for (int i = 0; i < reportValues.Length; i++) {
+                        if ( i == 0)
+                        {
+                            //skip first level
+                            isSafe = validate(reportValues.Skip(1).ToArray());    
+                        }
+                        else if ( i == reportValues.Length - 1 )
+                        {
+                            //skip last level
+                            isSafe = validate(reportValues.Skip(0).Take(reportValues.Length - 1).ToArray());
+                        }
+                        else{
+                            int[] partOne = reportValues.Skip(0).Take(i).ToArray();
+                            int[] partTwo = reportValues.Skip(i+1).Take(reportValues.Length - i - 1).ToArray();
+                            Console.WriteLine($"{partOne.Concat(partTwo).ToArray()}" , reportValues.Length-1);
+                            isSafe = validate(partOne.Concat(partTwo).ToArray());
+                        } 
+                        if (isSafe) { 
+                                answer++;
+                                break;
+                        }
+                    }   
+                }
+            }
+            Console.WriteLine($"The answer is of day {day} part 2 = {answer}");
+        }
+
+        private static bool validate(int[] reportValues) {
+                
                 bool decrease = false;
                 bool increase = false;
                 bool safeReport = true;
-
-                int[] reportValues = report?.Split(' ')?.Select(Int32.Parse)?.ToArray();
 
                 for (int i = 0; i < (reportValues.Length-1); i++){
                     int diff = reportValues[i+1] - reportValues[i];
@@ -42,85 +96,12 @@ namespace AdventOfCode
                 }
 
                 if ( (!decrease && increase && safeReport) || (decrease && !increase && safeReport) ) {
-                    answer ++;
+                    return true;
                 }
-            }
-
-            Console.WriteLine($"The answer is of day {day} = {answer}");
-        }
-
-        public static void Part2() {
-            int day = 2;
-            int answer = 0;
-
-            string[] data = readInput(day, false);
-
-                foreach (string report in data) {
-                
-                bool decrease = false;
-                bool increase = false;
-                bool safeReport = true;
-                bool skippedOne = false;    
-
-                int[] reportValues = report?.Split(' ')?.Select(Int32.Parse)?.ToArray();
-                int[] levelDiffs = new int[reportValues.Length-1];
-                
-                //calculate diffs
-                for (int i = 0; i < (reportValues.Length-1); i++){
-                    levelDiffs[i] = reportValues[i+1] - reportValues[i];
+                else {
+                    return false;
                 }
-
-                //check diffs
-                for (int i = 0; i < levelDiffs.Length; i++){
-                    int diff = levelDiffs[i];
-                    int skipDiff = 0;
-                    if ( i < levelDiffs.Length-1){
-                        skipDiff = diff + levelDiffs[i+1];           //skipping one is same as sum of two diffs       
-                    }
-                    else {
-                        skipDiff = diff;
-                    }
-
-                    if ( 0 < diff && diff <= 3 && !decrease) {
-                        increase = true;      
-                    }
-                    else if ( -3 <= diff && diff < 0 && !increase){
-                        decrease = true;
-                    }
-                    else {
-                        //First level can easily be skipped
-                        if (i == 0){
-                            skippedOne = true;
-                        }
-                        // //Last can be skipped if no other level has been skipped
-                        // else if (i == (levelDiffs.Length-1) && !skippedOne){
-                        //     skippedOne = true;
-                        // }
-                        //
-                        else if ( 0 < skipDiff && skipDiff <= 3 && !skippedOne && !decrease) {
-                        increase = true;
-                        skippedOne = true;      
-                        }
-                        else if ( -3 <= skipDiff && skipDiff < 0 && !skippedOne && !increase){
-                        decrease = true;
-                        skippedOne = true;
-                        }                     
-                        else{
-                            safeReport = false;
-                        }
-                    }              
-                }
-
-                if ( (!decrease && increase && safeReport) || (decrease && !increase && safeReport) ) {
-                    answer ++;   
-                }
-                else{
-                    Console.WriteLine(report);
-                }
-            }
-
-            Console.WriteLine($"The answer is of day {day} part 2 = {answer}");
-        }
+        }       
 
         public static string[] readInput(int day, bool useExample)
         {
