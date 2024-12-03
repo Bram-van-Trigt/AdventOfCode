@@ -1,79 +1,72 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
-namespace AdventOfCode
+public static class AoC2023Day6
 {
-    public static class AoC2023Day6
-    {
 
-        public static void Part1() {
-            int day = 6;
-            int answer = 1;
+    public static void Part1() {
+        int day = 6;
+        int answer = 1;
 
-            string[] input = readInput(day, false);
+        string[] input = readInput(day, false);
             
-            string[] time = input[0].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            string[] distance = input[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        string[] time = input[0].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        string[] distance = input[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-            //Skip over "Time:" and "Distance"
-            for (int i = 1; i < distance.Length; i++)
-            {   
-                answer = answer * getNumberOfWins(int.Parse(time[i]), int.Parse(distance[i]));
-            }
-
-            Console.WriteLine($"The answer is of day {day} = {answer}");
-
+        //Skip over "Time:" and "Distance"
+        for (int i = 1; i < distance.Length; i++)
+        {   
+            answer = answer * getNumberOfWins(int.Parse(time[i]), int.Parse(distance[i]));
         }
 
-        public static void Part2()
-        {
-            int day = 6;
-
-
-            string[] input = readInput(day, false);
-
-            long time = long.Parse(input[0].Replace(" ", ""));
-            long distance= long.Parse(input[1].Replace(" ", ""));
-
-            Console.WriteLine(time);
-            Console.WriteLine(distance);
-
-            int answer = getNumberOfWins(time, distance);
-
-            Console.WriteLine($"The answer is of day {day} = {answer}");
-
-        }
-
-        public static string[] readInput(int day, bool example)
-        {
-            string[] exampleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/exampleInputDay{day}.txt");
-            string[] puzzleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode2022/AdventOfCode2022/puzzleInputFiles/puzzleInputDay{day}.txt");
-
-            if (example) { return exampleInput; }
-            else { return puzzleInput; }
-        }
-
-        public static int getNumberOfWins( long time, long distance)
-        {
-            int subAnswer = 0;
-
-            for (int i = 1; i < time; i++)
-            {
-                //Speed = i, remaining time = time-i, racedDistance = speed * remaining time
-                long racedDistance = (time-i) * i;
-                
-                if(racedDistance > distance) { subAnswer++; }
-            }
-
-            Console.WriteLine($"The subanswer for time {time} = {subAnswer} ");
-            return subAnswer;
-                       
-        }
+        Console.WriteLine($"The answer is of day {day} = {answer}");
 
     }
+
+    public static void Part2()
+    {
+        int day = 6;
+
+
+        string[] input = readInput(day, false);
+
+        long time = long.Parse(input[0].Replace(" ", ""));
+        long distance= long.Parse(input[1].Replace(" ", ""));
+
+        Console.WriteLine(time);
+        Console.WriteLine(distance);
+
+        int answer = getNumberOfWins(time, distance);
+
+        Console.WriteLine($"The answer is of day {day} = {answer}");
+
+    }
+
+    public static string[] readInput(int day, bool example)
+    {
+        string[] exampleInput = File.ReadAllLines($"./puzzleInputFiles/exampleInputDay{day}.txt");
+        string[] puzzleInput = File.ReadAllLines($"./puzzleInputFiles/puzzleInputDay{day}.txt");
+
+        if (example) { return exampleInput; }
+        else { return puzzleInput; }
+    }
+
+    public static int getNumberOfWins( long time, long distance)
+    {
+        int subAnswer = 0;
+
+        for (int i = 1; i < time; i++)
+        {
+            //Speed = i, remaining time = time-i, racedDistance = speed * remaining time
+            long racedDistance = (time-i) * i;
+                
+            if(racedDistance > distance) { subAnswer++; }
+        }
+
+        Console.WriteLine($"The subanswer for time {time} = {subAnswer} ");
+        return subAnswer;
+                       
+    }
+
 }
+

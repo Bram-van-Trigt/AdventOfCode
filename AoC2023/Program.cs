@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace AdventOfCode
+namespace AoC2023
 {
     internal class Program
     {
