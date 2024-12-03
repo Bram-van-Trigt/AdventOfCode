@@ -1,121 +1,109 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-
-namespace AdventOfCode
+﻿public static class AoC2024Day2
 {
-    public static class AoC2024Day2
-    {
 
-        public static void Part1() {
-            int day = 2;
-            int answer = 0;
+    public static void Part1() {
+        int day = 2;
+        int answer = 0;
 
-            string[] data = readInput(day, false);
+        string[] data = readInput(day, false);
             
-            foreach (string report in data) {
-                int[] reportValues = report.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
-                bool isSafe = validate(reportValues);
+        foreach (string report in data) {
+            int[] reportValues = report.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
+            bool isSafe = validate(reportValues);
                 
-                if (isSafe) { answer++; }
-            }
-
-            Console.WriteLine($"The answer is of day {day} = {answer}");
+            if (isSafe) { answer++; }
         }
 
-        public static void Part2() {
-            int day = 2;
-            int answer = 0;
+        Console.WriteLine($"The answer is of day {day} = {answer}");
+    }
 
-            string[] data = readInput(day, false);
+    public static void Part2() {
+        int day = 2;
+        int answer = 0;
 
-            foreach (string report in data) {
+        string[] data = readInput(day, false);
+
+        foreach (string report in data) {
                     
-                int[] reportValues = report?.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
-                bool isSafe = false;
+            int[] reportValues = report?.Split(' ')?.Select(Int32.Parse)?.ToArray()!;
+            bool isSafe = false;
 
-                //check report without skip
-                if (validate(reportValues)){
-                    answer++;
-                    continue;
-                }
-                else {
-                    isSafe = false;
-
-                    for (int i = 0; i < reportValues.Length; i++) {
-                        if ( i == 0)
-                        {
-                            //skip first level
-                            isSafe = validate(reportValues.Skip(1).ToArray());    
-                        }
-                        else if ( i == reportValues.Length - 1 )
-                        {
-                            //skip last level
-                            isSafe = validate(reportValues.Skip(0).Take(reportValues.Length - 1).ToArray());
-                        }
-                        else{
-                            int[] partOne = reportValues.Skip(0).Take(i).ToArray();
-                            int[] partTwo = reportValues.Skip(i+1).Take(reportValues.Length - i - 1).ToArray();
-                            Console.WriteLine($"{partOne.Concat(partTwo).ToArray()}" , reportValues.Length-1);
-                            isSafe = validate(partOne.Concat(partTwo).ToArray());
-                        } 
-                        if (isSafe) { 
-                                answer++;
-                                break;
-                        }
-                    }   
-                }
+            //check report without skip
+            if (validate(reportValues)){
+                answer++;
+                continue;
             }
-            Console.WriteLine($"The answer is of day {day} part 2 = {answer}");
-        }
+            else {
+                isSafe = false;
 
-        private static bool validate(int[] reportValues) {
+                for (int i = 0; i < reportValues.Length; i++) {
+                    if ( i == 0)
+                    {
+                        //skip first level
+                        isSafe = validate(reportValues.Skip(1).ToArray());    
+                    }
+                    else if ( i == reportValues.Length - 1 )
+                    {
+                        //skip last level
+                        isSafe = validate(reportValues.Skip(0).Take(reportValues.Length - 1).ToArray());
+                    }
+                    else{
+                        int[] partOne = reportValues.Skip(0).Take(i).ToArray();
+                        int[] partTwo = reportValues.Skip(i+1).Take(reportValues.Length - i - 1).ToArray();
+                        Console.WriteLine($"{partOne.Concat(partTwo).ToArray()}" , reportValues.Length-1);
+                        isSafe = validate(partOne.Concat(partTwo).ToArray());
+                    } 
+                    if (isSafe) { 
+                            answer++;
+                            break;
+                    }
+                }   
+            }
+        }
+        Console.WriteLine($"The answer is of day {day} part 2 = {answer}");
+    }
+
+    private static bool validate(int[] reportValues) {
                 
-                bool decrease = false;
-                bool increase = false;
-                bool safeReport = true;
+            bool decrease = false;
+            bool increase = false;
+            bool safeReport = true;
 
-                for (int i = 0; i < (reportValues.Length-1); i++){
-                    int diff = reportValues[i+1] - reportValues[i];
+            for (int i = 0; i < (reportValues.Length-1); i++){
+                int diff = reportValues[i+1] - reportValues[i];
 
-                    //check for increase/ decrease and stepsize
-                    if ( 0 < diff && diff <= 3 ) {
-                        increase = true;
-                    }
-                    else if ( -3 <= diff && diff < 0){
-                        decrease = true;
-                    }
-                    else {
-                        safeReport = false;
-                        break;
-                    }                    
+                //check for increase/ decrease and stepsize
+                if ( 0 < diff && diff <= 3 ) {
+                    increase = true;
                 }
-
-                if ( (!decrease && increase && safeReport) || (decrease && !increase && safeReport) ) {
-                    return true;
+                else if ( -3 <= diff && diff < 0){
+                    decrease = true;
                 }
                 else {
-                    return false;
-                }
-        }       
+                    safeReport = false;
+                    break;
+                }                    
+            }
 
-        public static string[] readInput(int day, bool useExample)
+            if ( (!decrease && increase && safeReport) || (decrease && !increase && safeReport) ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    }       
+
+    public static string[] readInput(int day, bool useExample)
+    {
+        if (useExample)
         {
-            if (useExample)
-            {
-                string[] exampleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode/AoC2024/puzzleInputFiles/exampleInputDay{day}.txt");
-                return exampleInput;
-            }
-            else
-            {
-                string[] puzzleInput = File.ReadAllLines($"C:/Users/bramv/source/repos/Bram-van-Trigt/AdventOfCode/AoC2024/puzzleInputFiles/puzzleInputDay{day}.txt");
-                return puzzleInput;
-            }
+            string[] exampleInput = File.ReadAllLines($"./puzzleInputFiles/exampleInputDay{day}.txt");
+            return exampleInput;
         }
-
+        else
+        {
+            string[] puzzleInput = File.ReadAllLines($"./puzzleInputFiles/puzzleInputDay{day}.txt");
+            return puzzleInput;
+        }
     }
 }
