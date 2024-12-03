@@ -69,20 +69,18 @@ namespace AdventOfCode
                 for (int i = 0; i < (reportValues.Length-1); i++){
                     levelDiffs[i] = reportValues[i+1] - reportValues[i];
                 }
-             
-        
+
                 //check diffs
-                for (int i = 0; i < (reportValues.Length-1); i++){
-                    int diff = reportValues[i+1] - reportValues[i];
-
-                    
-
-                    //skip difference
+                for (int i = 0; i < levelDiffs.Length; i++){
+                    int diff = levelDiffs[i];
                     int skipDiff = 0;
-                    if (i < (reportValues.Length-1) && !(i==0)){
-                        skipDiff = reportValues[i+1] - reportValues[i-1];
+                    if ( i < levelDiffs.Length-1){
+                        skipDiff = diff + levelDiffs[i+1];           //skipping one is same as sum of two diffs       
                     }
-                   
+                    else {
+                        skipDiff = diff;
+                    }
+
                     if ( 0 < diff && diff <= 3 && !decrease) {
                         increase = true;      
                     }
@@ -94,20 +92,19 @@ namespace AdventOfCode
                         if (i == 0){
                             skippedOne = true;
                         }
-                        //Last can be skipped if no other level has been skipped
-                        else if (i == reportValues.Length && !skippedOne){
-                            skippedOne = true;
-                        }
+                        // //Last can be skipped if no other level has been skipped
+                        // else if (i == (levelDiffs.Length-1) && !skippedOne){
+                        //     skippedOne = true;
+                        // }
                         //
-                        else if ( 0 < skipDiff && skipDiff <= 3 && !skippedOne) {
+                        else if ( 0 < skipDiff && skipDiff <= 3 && !skippedOne && !decrease) {
                         increase = true;
                         skippedOne = true;      
                         }
-                        else if ( -3 <= skipDiff && skipDiff < 0 && !skippedOne){
+                        else if ( -3 <= skipDiff && skipDiff < 0 && !skippedOne && !increase){
                         decrease = true;
                         skippedOne = true;
-                        }
-                     
+                        }                     
                         else{
                             safeReport = false;
                         }
@@ -118,7 +115,7 @@ namespace AdventOfCode
                     answer ++;   
                 }
                 else{
-                    Console.WriteLine(report.ToString());
+                    Console.WriteLine(report);
                 }
             }
 
