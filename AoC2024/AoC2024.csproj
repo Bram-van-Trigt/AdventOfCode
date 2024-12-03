@@ -7,22 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="puzzleInputFiles\exampleInputDay1.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="puzzleInputFiles\exampleInputDay2.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="puzzleInputFiles\exampleInputDay3.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="puzzleInputFiles\puzzleInputDay1.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="puzzleInputFiles\puzzleInputDay2.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="puzzleInputFiles\puzzleInputDay3.txt">
+    <None Update="puzzleInputFiles\*.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
