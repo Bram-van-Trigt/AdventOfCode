@@ -36,7 +36,7 @@ public static class AoC2024Day4
             answer += Regex.Matches(line, "SAMX").Count;
         }
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
     public static void Part2()
@@ -93,7 +93,7 @@ public static class AoC2024Day4
             }
         }
         Console.WriteLine(count);
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
     public static string[] GetVerticalLines(string[] data)

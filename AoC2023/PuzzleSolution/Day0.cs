@@ -12,7 +12,7 @@ namespace AdventOfCode
 
             string[] data = readInput(day, true);
 
-            Console.WriteLine($"The answer is of day {day} = {answer}");
+            Console.WriteLine($"The answer of day {day} = {answer}");
         }
 
         public static string[] readInput(int day, bool useExample)

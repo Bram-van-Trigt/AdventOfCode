@@ -36,7 +36,7 @@ public static class AoC2023Day4
             answer += subanswer;
         }
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
     public static void Part2()
@@ -84,7 +84,7 @@ public static class AoC2023Day4
 
 
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
     public static string[] readInput(int day, bool runExample)

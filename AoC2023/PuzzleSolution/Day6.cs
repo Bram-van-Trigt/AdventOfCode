@@ -19,7 +19,7 @@ public static class AoC2023Day6
             answer = answer * getNumberOfWins(int.Parse(time[i]), int.Parse(distance[i]));
         }
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
 
     }
 
@@ -38,7 +38,7 @@ public static class AoC2023Day6
 
         int answer = getNumberOfWins(time, distance);
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
 
     }
 

@@ -9,7 +9,7 @@ public static class AoC2024Day3
         string data = readInput(day, true);    
         answer += RegexFind(data);
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
     public static void Part2() {
@@ -24,7 +24,7 @@ public static class AoC2024Day3
             answer += RegexFind(dontSplit[0]);
         }
 
-        Console.WriteLine($"The answer is of day {day} = {answer}");
+        Console.WriteLine($"The answer of day {day} = {answer}");
     }   
 
     public static int RegexFind(string search){
