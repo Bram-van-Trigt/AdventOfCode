@@ -1,4 +1,7 @@
+using System;
 using System.Data;
+using QuickGraph;
+using QuickGraph.Algorithms;
 
 public static class AoC2024Day5
 {
@@ -6,30 +9,94 @@ public static class AoC2024Day5
     {
         int day = 5;
         int answer = 0;
-        bool useExample = true;
+        bool useExample = false;
 
         List<int[]> orderRules = readOrderingRules(day, useExample);
         List<int[]> pages = readPagesToProduce(day, useExample);
 
-        foreach (int[] pageLine in pages){
+        foreach (int[] pageLine in pages)
+        {
             bool isValid = validateOrder(pageLine, orderRules);
-            if (isValid){
-                answer += pageLine[pageLine.Length/2];
+            if (isValid)
+            {
+                answer += pageLine[pageLine.Length / 2];
             }
         }
 
         Console.WriteLine($"The answer of day {day} = {answer}");
     }
 
-    public static bool validateOrder(int[]pageLine, List<int[]> orderRules){
+    public static void Part2()
+    {
+        int day = 5;
+        int answer = 0;
+        bool useExample = false;
+
+        List<int[]> orderRules = readOrderingRules(day, useExample);
+        List<int[]> pages = readPagesToProduce(day, useExample);
+
+        
+
+        foreach (int[] pageLine in pages)
+        {
+            bool isValid = validateOrder(pageLine, orderRules);
+            if (!isValid)
+            {   
+                List<int[]> tempRules = new List<int[]>();
+
+                foreach ( int[] rule in orderRules){
+                    if (pageLine.Contains(rule[0])){
+                        tempRules.Add(rule);
+                    }
+                }
+
+                var graphOrder = CreateGraph(tempRules);
+
+                var newPageList = graphOrder.Where(node => pageLine.Contains(node)).ToArray();
+                answer += newPageList[newPageList.Count() / 2];
+            }
+        }
+        Console.WriteLine($"The answer of day {day} = {answer}");
+    }
+
+
+    public static int[] CreateGraph(List<int[]> rules)
+    {
+
+        var graph = new AdjacencyGraph<int, Edge<int>>();
+
+        foreach (int[] rule in rules)
+        {
+            if (!graph.ContainsVertex(rule[0]))
+            {
+                graph.AddVertex(rule[0]);
+            }
+            if (!graph.ContainsVertex(rule[1]))
+            {
+                graph.AddVertex(rule[1]);
+            }
+            if (!graph.ContainsEdge(rule[0], rule[1]))
+            {
+                graph.AddEdge(new Edge<int>(rule[0], rule[1]));
+            }
+        }
+
+        var sortedOrder = graph.TopologicalSort().ToArray();
+        return sortedOrder;
+    }
+
+    public static bool validateOrder(int[] pageLine, List<int[]> orderRules)
+    {
         bool valid = true;
 
-        foreach (int[] rule in orderRules){
+        foreach (int[] rule in orderRules)
+        {
 
             int indexBefore = Array.IndexOf(pageLine, rule[0]);
             int indexAfter = Array.IndexOf(pageLine, rule[1]);
 
-            if(indexBefore > indexAfter && !(indexBefore == -1) && !(indexAfter == -1)){
+            if (indexBefore > indexAfter && !(indexBefore == -1) && !(indexAfter == -1))
+            {
                 valid = false;
             }
         }
