@@ -24,7 +24,8 @@
             position += value;
 
             // handle overflow
-            while (position < 0 ) { 
+            while (position < 0)
+            {
                 position = 100 + position;
 
             }
@@ -53,6 +54,8 @@
 
         foreach (var line in input)
         {
+            int start = position;
+
             string lineText = line;
             if (line.Contains("L"))
                 lineText = line.Replace('L', '-');
@@ -62,44 +65,32 @@
 
             int value = Convert.ToInt32(lineText);
 
-            if (value < -99)
-            {
-                int fullRotations = value / 100;
-                int diff = value - (fullRotations * 100);
-                answer += Math.Abs(value / 100);
-                position += diff;
-
-                if (position == 0)
-                {
-                    answer++;
-                }
-            }
-
-            else if (value > 100)
-            {
-                int fullRotations = value / 100;
-                int diff = value - (fullRotations * 100);
-                answer += value / 100;
-                position += diff;
-            }
-
-            else {
-                position += value;
-            }
+            int fullRotations = value / 100;
+            int diff = value - (fullRotations * 100);
+            answer += Math.Abs(value / 100);
+            int end = start + diff;
 
             //handle overflow or exact position
+            //if (end == 0)
+            //{
+            //    answer++;
+            //    position = end;
+            //}
+            if (end > 99)
+            {
+                position = end - 100;
+                answer++;
+            }
+            else if (end < 0)
+            {
+                position = 100 + end;
+                answer++;
+            }
+            else
+            {
+                position = end;
+            }
 
-            if (position > 99)
-            {
-                position = position - 100;
-                answer++;
-            }
-            if (position < 0)
-            {
-                position = 100 + position;
-                answer++;
-            }
-            
             Console.WriteLine($"position {position}");
             Console.WriteLine($"answer {answer}");
 
