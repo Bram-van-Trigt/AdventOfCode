@@ -7,7 +7,7 @@ namespace AoC2025
         private static void Main(string[] args)
         {
             int year = 2025;
-            int overrideDay = 6;
+            int overrideDay = 0;
 
             int day = GetPuzzleDay(overrideDay);
             Console.WriteLine($"Puzzle day loaded is {day}");
