@@ -67,24 +67,30 @@
 
             int fullRotations = value / 100;
             int diff = value - (fullRotations * 100);
-            answer += Math.Abs(value / 100);
+            answer += Math.Abs(fullRotations);
             int end = start + diff;
 
             //handle overflow or exact position
-            //if (end == 0)
-            //{
-            //    answer++;
-            //    position = end;
-            //}
+            if (end == 0)
+            {
+                answer++;
+                position = end;
+            }
             if (end > 99)
             {
                 position = end - 100;
-                answer++;
+                if(start != 0)
+                {
+                    answer++;
+                }
             }
             else if (end < 0)
             {
                 position = 100 + end;
-                answer++;
+                if(start != 0)
+                {
+                    answer++;
+                }
             }
             else
             {
