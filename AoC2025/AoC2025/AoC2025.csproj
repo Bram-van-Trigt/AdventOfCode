@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="QuickGraph" Version="3.6.61119.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="puzzleInputFiles\*.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
