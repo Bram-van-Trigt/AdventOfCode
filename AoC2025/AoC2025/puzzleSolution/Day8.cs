@@ -1,56 +1,149 @@
-﻿using System.Numerics;
+﻿using QuickGraph;
+using QuickGraph.Algorithms;
+using System.Numerics;
+
 
 class AoC2025Day8
 {
-    static char[,] grid;
-    static int rows, cols;
-    static HashSet<string> timelines = new HashSet<string>();
-
     public static void Part1()
     {
         int day = 8;
-        long answer = 0;
+        bool example = false;
 
-        string[] input = readInput(day, true);
+        string[] input = readInput(day, example);
 
-        var junctionBoxes = new List<JunctionBox>();
+        var jbs = new List<JunctionBox>();
 
-        // Get a nearestJb for every jb
-        for (int i = 0; i < input.Length; i++)
+        foreach (string box in input)
         {
-            var junctionBox = new JunctionBox(input[i]);
+            jbs.Add(new JunctionBox(box));
+        }
+        Console.WriteLine($"Created {jbs.Count} junction boxes");
 
-            for (int j = 0; j < input.Length; j++)
+        // Calculate all distances
+        var distances = new List<(string A, string B, double Dist)>();
+        for (int i = 0; i < jbs.Count; i++)
+        {
+            for (int j = i + 1; j < jbs.Count; j++)
             {
-                if (i == j) continue;
-
-                double dist = CalculateDistance(junctionBox, new JunctionBox(input[j]));
-                if (junctionBox.distance == null || junctionBox.distance < dist)
-                {
-                    junctionBox.distance = dist;
-                    junctionBox.nearestJB = input[j];
-                }
+                double dist = CalculateDistance(jbs[i], jbs[j]);
+                distances.Add((jbs[i].name, jbs[j].name, dist));
             }
-
-            junctionBoxes.Add(junctionBox);
         }
 
-        var orderedJunctionBoxes = junctionBoxes.OrderBy(junctionBox => junctionBox.distance);
+        // Sort for shortest distance
+        distances.Sort((e1, e2) => e1.Dist.CompareTo(e2.Dist));
 
-        Console.WriteLine($"The answer of day {day} = {answer}");
+        var graph = new UndirectedGraph<string, Edge<string>>(false);
+        foreach (var jb in jbs) graph.AddVertex(jb.name);
 
+        int attemptedConnections;
+        if (example) attemptedConnections = 10;
+        else attemptedConnections = 1000;
+
+        for (int n = 0; n < attemptedConnections; n++)
+        {
+            var e = distances[n];
+            graph.AddEdge(new Edge<string>(e.A, e.B));
+        }
+
+        // Get connected junction boxes
+        var componentMap = new Dictionary<string, int>();
+        int componentCount = graph.ConnectedComponents(componentMap);
+
+        // Compute component sizes from the mapping
+        var sizes = new Dictionary<int, int>();
+        foreach (var jb in componentMap)
+        {
+            int component = jb.Value;
+            if (!sizes.TryGetValue(component, out var count)) sizes[component] = 1;
+            else sizes[component] = count + 1;
+        }
+
+        var result = sizes.Values.OrderByDescending(x => x).Take(3).ToList();
+        long answer = 1;
+        
+        foreach (var s in result)
+        {
+            answer *= s;
+        }
+
+        Console.WriteLine($"Biggest Circuits: {string.Join(", ", result)}");
+        Console.WriteLine($"Answer of day{day} = {answer}");
     }
-    //public static void Part2()
-    //{
 
-    //}
+    public static void Part2()
+    {
+        int day = 8;
+        bool example = false;
+
+        string[] input = readInput(day, example);
+
+        var jbs = new List<JunctionBox>();
+
+        foreach (string box in input)
+        {
+            jbs.Add(new JunctionBox(box));
+        }
+        Console.WriteLine($"Created {jbs.Count} junction boxes");
+
+        // Calculate all distances
+        var distances = new List<(string A, string B, double Dist)>();
+        for (int i = 0; i < jbs.Count; i++)
+        {
+            for (int j = i + 1; j < jbs.Count; j++)
+            {
+                double dist = CalculateDistance(jbs[i], jbs[j]);
+                distances.Add((jbs[i].name, jbs[j].name, dist));
+            }
+        }
+
+        // Sort for shortest distance
+        distances.Sort((e1, e2) => e1.Dist.CompareTo(e2.Dist));
+        var jbByName = jbs.ToDictionary(x => x.name);
+
+        var graph = new UndirectedGraph<string, Edge<string>>(false);
+        foreach (var jb in jbs) graph.AddVertex(jb.name);
+
+        string? lastA = null;
+        string? lastB = null;
+
+        // Add edges one by one
+        for (int n = 0; n < distances.Count; n++)
+        {
+            var e = distances[n];
+            graph.AddEdge(new Edge<string>(e.A, e.B));
+
+            var componentMap = new Dictionary<string, int>();
+            int componentCount = graph.ConnectedComponents(componentMap);
+
+            if (componentCount == 1)
+            {
+                lastA = e.A;
+                lastB = e.B;
+                break;
+            }
+        }
+
+        if (lastA is null || lastB is null)
+        {
+            Console.WriteLine("Did not reach a single component.");
+            return;
+        }
+
+        long x1 = jbByName[lastA].posX;
+        long x2 = jbByName[lastB].posX;
+        long answer = x1 * x2;
+
+        Console.WriteLine($"Last connected: {lastA} - {lastB}");
+        Console.WriteLine($"Answer of day{day} = {answer}");
+    }
 
     public static double CalculateDistance(JunctionBox jb1, JunctionBox jb2)
     {
-        Vector3 pos1 = new Vector3(jb1.posX, jb1.posY, jb1.posZ);
-        Vector3 pos2 = new Vector3(jb2.posX, jb2.posY, jb2.posZ);
-
-        return Vector3.Distance(pos1, pos2);
+        Vector3 point1 = new Vector3(jb1.posX, jb1.posY, jb1.posZ);
+        Vector3 point2 = new Vector3(jb2.posX, jb2.posY, jb2.posZ);
+        return Vector3.Distance(point1, point2);  
     }
 
     public static string[] readInput(int day, bool useExample)
@@ -68,13 +161,10 @@ class AoC2025Day8
     }
 }
 
-struct JunctionBox
+class JunctionBox
 {
-
     public string name;
     public int posY, posX, posZ;
-    public string? nearestJB;
-    public double? distance;
 
     public JunctionBox(string name)
     {
@@ -87,6 +177,11 @@ struct JunctionBox
     }
 }
 
-    
+
+
+
+
+
+
 
 
